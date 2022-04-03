@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Like;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class LikeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +31,10 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Like  $like
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(Like $like)
     {
         //
     }
@@ -43,10 +43,10 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Like  $like
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, Like $like)
     {
         //
     }
@@ -54,10 +54,10 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Like  $like
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(Like $like)
     {
         //
     }
