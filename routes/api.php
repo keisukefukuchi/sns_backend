@@ -19,6 +19,6 @@ use App\Http\Controllers\CommentController;
 */
 
 Route::apiResource('/v1/user', UserController::class);
-Route::apiResource('/v1/Post', PostController::class);
-Route::apiResource('/v1/Like', LikeController::class);
-Route::apiResource('/v1/Comment', CommentController::class);
+Route::apiResource('/v1/post', PostController::class);
+Route::apiResource('/v1/like', LikeController::class);
+Route::apiResource('/v1/comment', CommentController::class);

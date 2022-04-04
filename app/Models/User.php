@@ -43,4 +43,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function Posts()
+    {
+        return $this->hasMany('App\Models\Post');
+    }
+
+    public function Comments()
+    {
+        return $this->hasMany('App\Models\Comment');
+    }
+
+    public function Likes()
+    {
+        return $this->hasMany('App\Models\Like');
+    }
 }
