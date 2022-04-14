@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
+
+
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -14,7 +17,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $items = Post::with(['user:id,name,uid'])->get();
+        return response()->json([
+            'data' => $items
+        ],200);
     }
 
     /**
@@ -25,7 +31,15 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $uid = $request->input('uid');
+        $user = User::all()->where('uid','=',$uid)->first();
+        $items = Post::create([
+            'message' => $request->message,
+            'user_id' => $user->id,
+        ]);
+        return response()->json([
+            'data' => $items
+        ],201);
     }
 
     /**
@@ -36,7 +50,16 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        $item = Post::find($post);
+        if ($item) {
+            return response()->json([
+                'data' => $item
+            ], 200);
+        } else {
+            return response()->json([
+                'name' => 'Not found',
+            ], 404);
+        }
     }
 
     /**
@@ -48,7 +71,19 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $update = [
+            'name' => $request->name,
+        ];
+        $item = Post::where('id', $post->id)->update($update);
+        if ($item) {
+            return response()->json([
+                'name' => 'Updated successfully',
+            ], 200);
+        } else {
+            return response()->json([
+                'name' => 'Not found',
+            ], 404);
+        }
     }
 
     /**
@@ -59,6 +94,15 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $item = Post::where('id', $post->id)->delete();
+        if ($item) {
+            return response()->json([
+                'name' => 'Deleted successfully',
+            ], 200);
+        } else {
+            return response()->json([
+                'name' => 'Not found',
+            ], 404);
+        }
     }
 }
