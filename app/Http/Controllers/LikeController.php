@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Like;
+use App\Models\Post;
+use App\Models\User;
+
+
 use Illuminate\Http\Request;
 
 class LikeController extends Controller
@@ -14,7 +18,10 @@ class LikeController extends Controller
      */
     public function index()
     {
-        //
+        $items = Like::all();
+        return response()->json([
+            'data' => $items
+        ], 200);
     }
 
     /**
@@ -25,7 +32,50 @@ class LikeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $uid = $request->input('uid');
+        $user = User::all()->where('uid','=',$uid)->first();
+        $user_id = $user->id;
+
+        $param = [
+            'user_id' => $user_id,
+            'post_id' => $request->post_id,
+        ];
+        $get_query = Like::where([
+            ['user_id', $user_id],
+            ['post_id', $request->post_id]
+        ])->first();
+
+        if ($get_query) {
+            $item = Like::where([
+                ['user_id', $user_id],
+                ['post_id', $request->post_id]
+            ])->delete();
+
+            $post = Post::find($request->post_id)->first();
+
+            $like_count = $post->like_count;
+
+            $like_count--;
+
+            $update = [
+                'like_count' => $like_count,
+            ];
+
+            $item = Post::where('id', $request->post_id)->update($update);
+        } else {
+            $item = Like::create($param);
+            $post = Post::find($request->post_id)->first();
+            $like_count = $post->like_count;
+            $like_count++;
+            $update = [
+                'like_count' => $like_count,
+            ];
+            $item = Post::where('id', $request->post_id)->update($update);
+        }
+
+        return response()->json([
+            'data' => $item
+        ], 201);
     }
 
     /**
