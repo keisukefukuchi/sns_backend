@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Like;
 use App\Models\Post;
 use App\Models\User;
+
 
 
 use Illuminate\Http\Request;
@@ -94,6 +96,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $like_id = Like::where('post_id', $post->id)->delete();
         $item = Post::where('id', $post->id)->delete();
         if ($item) {
             return response()->json([

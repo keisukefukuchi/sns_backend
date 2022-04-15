@@ -32,38 +32,30 @@ class LikeController extends Controller
      */
     public function store(Request $request)
     {
-        $uid = $request->input('uid');
+        $uid = $request->uid;
         $user = User::all()->where('uid','=',$uid)->first();
         $user_id = $user->id;
-
-        $param = [
-            'user_id' => $user_id,
-            'post_id' => $request->post_id,
-        ];
         $get_query = Like::where([
             ['user_id', $user_id],
             ['post_id', $request->post_id]
         ])->first();
 
         if ($get_query) {
-            $item = Like::where([
-                ['user_id', $user_id],
-                ['post_id', $request->post_id]
-            ])->delete();
-
+            $get_query->delete();
             $post = Post::find($request->post_id)->first();
-
             $like_count = $post->like_count;
-
             $like_count--;
-
             $update = [
                 'like_count' => $like_count,
             ];
-
             $item = Post::where('id', $request->post_id)->update($update);
         } else {
+            $param = [
+                'user_id' => $user_id,
+                'post_id' => $request->post_id,
+            ];
             $item = Like::create($param);
+            
             $post = Post::find($request->post_id)->first();
             $like_count = $post->like_count;
             $like_count++;
