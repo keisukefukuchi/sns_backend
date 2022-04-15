@@ -19,7 +19,7 @@ class CreatePostsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('title')->nullable();
             $table->string('message');
-            $table->integer('like_count')->default(0); 
+            $table->integer('like_count')->default(0);
             $table->timestamps();
         });
     }
@@ -32,5 +32,6 @@ class CreatePostsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('posts');
+        Schema::dropIfExists('likes');
     }
 }

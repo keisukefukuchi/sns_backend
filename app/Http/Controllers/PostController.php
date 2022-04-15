@@ -31,8 +31,8 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $uid = $request->input('uid');
-        $user = User::all()->where('uid','=',$uid)->first();
+        $uid = $request->uid;
+        $user = User::where('uid','=',$uid)->first();
         $items = Post::create([
             'message' => $request->message,
             'user_id' => $user->id,
