@@ -33,7 +33,7 @@ class LikeController extends Controller
     public function store(Request $request)
     {
         $uid = $request->uid;
-        $user = User::all()->where('uid','=',$uid)->first();
+        $user = User::all()->where('uid', '=', $uid)->first();
         $user_id = $user->id;
         $get_query = Like::where([
             ['user_id', $user_id],
@@ -42,31 +42,30 @@ class LikeController extends Controller
 
         if ($get_query) {
             $get_query->delete();
-            $post = Post::find($request->post_id)->first();
+            $post = Post::where('id', $request->post_id)->where('user_id', $user_id)->first();
             $like_count = $post->like_count;
             $like_count--;
             $update = [
                 'like_count' => $like_count,
             ];
-            $item = Post::where('id', $request->post_id)->update($update);
+            $items = Post::where('id', $request->post_id)->update($update);
         } else {
-            $param = [
+            Like::create([
                 'user_id' => $user_id,
                 'post_id' => $request->post_id,
-            ];
-            $item = Like::create($param);
-            
-            $post = Post::find($request->post_id)->first();
+            ]);
+
+            $post = Post::where('id', $request->post_id)->where('user_id', $user_id)->first();
             $like_count = $post->like_count;
             $like_count++;
             $update = [
                 'like_count' => $like_count,
             ];
-            $item = Post::where('id', $request->post_id)->update($update);
+            $items = Post::where('id', $request->post_id)->update($update);
         }
 
         return response()->json([
-            'data' => $item
+            'data' => $items
         ], 201);
     }
 
